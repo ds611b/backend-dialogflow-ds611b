@@ -1,6 +1,7 @@
 import Fastify from 'fastify';
 import config from './config/config.js';
 import homeRoutes from './routes/homeRoutes.js';
+import proyectoRoutes from './routes/proyectosRoutes.js';
 import swagger from '@fastify/swagger';
 import swaggerUI from '@fastify/swagger-ui';
 import staticFiles from '@fastify/static';
@@ -72,11 +73,16 @@ await fastify.register(staticFiles, {
  * Todas las rutas definidas en homeRoutes estarán bajo el prefijo '/api'.
  */
 fastify.register(homeRoutes, { prefix: '/api' });
+fastify.register(proyectoRoutes, { prefix: '/api' });
 
 /**
  * Registra la landing page de la API
  */
-fastify.get('/', (request, reply) => {
+fastify.get('/', {
+	schema: {
+		hide: true
+	}
+}, (request, reply) => {
 	reply.sendFile('index.html', { root: path.join(__dirname, '../public') });
 });
 
