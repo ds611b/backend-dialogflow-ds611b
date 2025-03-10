@@ -24,7 +24,13 @@ async function proyectoRoutes(fastify, options) {
                   nombre: { type: 'string' },
                   institucion: { type: 'string' },
                   ubicacion: { type: 'string' },
-                  modalidad_id: { type: 'number' },
+                  modalidad: {
+                    type: 'object',
+                    properties: {
+                      id: { type: 'number' },
+                      descripcion: { type: 'string' }
+                    }
+                  },
                   horarios: { type: 'string' },
                   remuneracion_economica: { type: 'boolean' },
                   descripcion: { type: 'string' },

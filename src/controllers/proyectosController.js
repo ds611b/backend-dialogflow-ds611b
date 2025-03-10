@@ -11,8 +11,7 @@ export async function getProyectos(request, reply) {
     const proyectos = await Proyecto.findAll({
       include: {
         model: CatalogModalidad,
-        as: 'modalidad',
-        attributes: ['descripcion']
+        as: 'modalidad'
       }
     });
     reply.send({ proyectos });
