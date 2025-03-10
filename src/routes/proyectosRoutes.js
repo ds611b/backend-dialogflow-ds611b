@@ -1,4 +1,4 @@
-import { getProyectos } from '../controllers/proyectosController.js';
+import { getProyectos, createProyecto } from '../controllers/proyectosController.js';
 
 /**
  * Define las rutas para los proyectos sociales.
@@ -46,6 +46,53 @@ async function proyectoRoutes(fastify, options) {
       }
     }
   }, getProyectos);
+
+  fastify.post('/proyectos', {
+    schema: {
+      description: 'Crea un nuevo proyecto social',
+      tags: ['Proyectos Sociales'],
+      body: {
+        type: 'object',
+        properties: {
+          nombre: { type: 'string' },
+          institucion: { type: 'string' },
+          ubicacion: { type: 'string' },
+          modalidad_id: { type: 'number' },
+          horarios: { type: 'string' },
+          remuneracion_economica: { type: 'boolean' },
+          descripcion: { type: 'string' },
+          fecha_inicio: { type: 'string', format: 'date' },
+          fecha_fin: { type: 'string', format: 'date' }
+        },
+        required: ['nombre', 'institucion', 'ubicacion', 'modalidad_id', 'horarios']
+      },
+      response: {
+        201: {
+          description: 'Proyecto creado exitosamente',
+          type: 'object',
+          properties: {
+            proyecto: {
+              type: 'object',
+              properties: {
+                id: { type: 'number' },
+                nombre: { type: 'string' },
+                institucion: { type: 'string' },
+                ubicacion: { type: 'string' },
+                modalidad_id: { type: 'number' },
+                horarios: { type: 'string' },
+                remuneracion_economica: { type: 'boolean' },
+                descripcion: { type: 'string' },
+                fecha_inicio: { type: 'string', format: 'date' },
+                fecha_fin: { type: 'string', format: 'date' },
+                created_at: { type: 'string' },
+                updated_at: { type: 'string' }
+              }
+            }
+          }
+        }
+      }
+    }
+  }, createProyecto);
 }
 
 export default proyectoRoutes;
