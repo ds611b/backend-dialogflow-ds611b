@@ -1,4 +1,4 @@
-import { getProyectos, createProyecto } from '../controllers/proyectosController.js';
+import { getProyectos, createProyecto, updateProyecto } from '../controllers/proyectosController.js';
 
 /**
  * Define las rutas para los proyectos sociales.
@@ -6,6 +6,7 @@ import { getProyectos, createProyecto } from '../controllers/proyectosController
  * @param {Object} options - Opciones de registro.
  */
 async function proyectoRoutes(fastify, options) {
+  // Endpoint GET: Obtener los Proyectos Existentes.
   fastify.get('/proyectos', {
     schema: {
       description: 'Obtiene todos los proyectos sociales',
@@ -47,6 +48,7 @@ async function proyectoRoutes(fastify, options) {
     }
   }, getProyectos);
 
+  // Endpoint POST: Actualizar un proyecto existente.
   fastify.post('/proyectos', {
     schema: {
       description: 'Crea un nuevo proyecto social',
@@ -93,6 +95,60 @@ async function proyectoRoutes(fastify, options) {
       }
     }
   }, createProyecto);
+
+   // Endpoint PUT: Actualizar un proyecto existente.
+  fastify.put('/proyectos/:id', {
+    schema: {
+      description: 'Actualiza un proyecto social existente',
+      tags: ['Proyectos Sociales'],
+      params: {
+        type: 'object',
+        properties: {
+          id: { type: 'number', description: 'ID del proyecto a actualizar' }
+        },
+        required: ['id']
+      },
+      body: {
+        type: 'object',
+        properties: {
+          nombre: { type: 'string' },
+          institucion: { type: 'string' },
+          ubicacion: { type: 'string' },
+          modalidad_id: { type: 'number' },
+          horarios: { type: 'string' },
+          remuneracion_economica: { type: 'boolean' },
+          descripcion: { type: 'string' },
+          fecha_inicio: { type: 'string', format: 'date' },
+          fecha_fin: { type: 'string', format: 'date' }
+        }
+      },
+      response: {
+        200: {
+          description: 'Proyecto actualizado exitosamente',
+          type: 'object',
+          properties: {
+            proyecto: {
+              type: 'object',
+              properties: {
+                id: { type: 'number' },
+                nombre: { type: 'string' },
+                institucion: { type: 'string' },
+                ubicacion: { type: 'string' },
+                modalidad_id: { type: 'number' },
+                horarios: { type: 'string' },
+                remuneracion_economica: { type: 'boolean' },
+                descripcion: { type: 'string' },
+                fecha_inicio: { type: 'string', format: 'date' },
+                fecha_fin: { type: 'string', format: 'date' },
+                created_at: { type: 'string' },
+                updated_at: { type: 'string' }
+              }
+            }
+          }
+        }
+      }
+    }
+  }, updateProyecto);
 }
 
 export default proyectoRoutes;

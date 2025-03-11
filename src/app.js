@@ -53,7 +53,6 @@ await fastify.register(swagger, {
 await fastify.register(swaggerUI, {
 	routePrefix: `/${docsPath}`,
 	uiConfig: {
-		docExpansion: 'full', // Expande toda la documentación al abrir
 		deepLinking: true // Permite compartir enlaces directos a endpoints
 	},
 	staticCSP: true // Mantiene seguridad básica
