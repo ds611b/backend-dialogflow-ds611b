@@ -1,4 +1,4 @@
-import { getProyectos, createProyecto, updateProyecto } from '../controllers/proyectosController.js';
+import { getProyectos, createProyecto, updateProyecto, getProyectoId } from '../controllers/proyectosController.js';
 
 /**
  * Define las rutas para los proyectos sociales.
@@ -96,7 +96,7 @@ async function proyectoRoutes(fastify, options) {
     }
   }, createProyecto);
 
-   // Endpoint PUT: Actualizar un proyecto existente.
+  // Endpoint PUT: Actualizar un proyecto existente.
   fastify.put('/proyectos/:id', {
     schema: {
       description: 'Actualiza un proyecto social existente',
@@ -145,10 +145,100 @@ async function proyectoRoutes(fastify, options) {
               }
             }
           }
+        },
+        404: {
+          description: 'Proyecto no encontrado',
+          type: 'object',
+          properties: {
+            success: { type: 'boolean', example: false },
+            error: {
+              type: 'object',
+              properties: {
+                code: { type: 'string', example: 'ERR_PROYECTO_NO_ENCONTRADO' },
+                message: { type: 'string', example: 'Proyecto no encontrado' },
+                details: { type: 'string', example: null }
+              }
+            }
+          }
+        },
+        500: {
+          description: 'Error al actualizar el proyecto social',
+          type: 'object',
+          properties: {
+            success: { type: 'boolean', example: false },
+            error: {
+              type: 'object',
+              properties: {
+                code: { type: 'string', example: 'ERR_UPDATE_PROYECTO' },
+                message: { type: 'string', example: 'Error al actualizar el proyecto social' },
+                details: { type: 'string', example: 'Detalles del error' }
+              }
+            }
+          }
         }
       }
     }
   }, updateProyecto);
+
+  fastify.get('/proyectos/:id', {
+    schema: {
+      description: 'Busca un proyecto social existente por ID',
+      tags: ['Proyectos Sociales'],
+      params: {
+        type: 'object',
+        properties: {
+          id: { type: 'number', description: 'ID del proyecto a buscar' }
+        },
+        required: ['id']
+      },
+      response: {
+        200: {
+          description: 'Proyecto obtenido exitosamente',
+          type: 'object',
+          properties: {
+            proyecto: {
+              type: 'object',
+              properties: {
+                id: { type: 'number' },
+                nombre: { type: 'string' },
+                institucion: { type: 'string' },
+                ubicacion: { type: 'string' },
+                modalidad: {
+                  type: 'object',
+                  properties: {
+                    id: { type: 'number' },
+                    descripcion: { type: 'string' }
+                  }
+                },
+                horarios: { type: 'string' },
+                remuneracion_economica: { type: 'boolean' },
+                descripcion: { type: 'string' },
+                fecha_inicio: { type: 'string', format: 'date' },
+                fecha_fin: { type: 'string', format: 'date' },
+                created_at: { type: 'string' },
+                updated_at: { type: 'string' }
+              }
+            }
+          }
+        },
+        404: {
+          description: 'Proyecto no encontrado',
+          type: 'object',
+          properties: {
+            success: { type: 'boolean', example: false },
+            error: {
+              type: 'object',
+              properties: {
+                code: { type: 'string', example: 'ERR_PROYECTO_NO_ENCONTRADO' },
+                message: { type: 'string', example: 'Proyecto no encontrado' },
+                details: { type: 'string', example: null }
+              }
+            }
+          }
+        }
+      }
+    }
+  }, getProyectoId);
 }
 
 export default proyectoRoutes;

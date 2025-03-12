@@ -122,4 +122,29 @@ export async function updateProyecto(request, reply) {
   }
 }
 
-export default { getProyectos, createProyecto, updateProyecto }
+export async function getProyectoId(request, reply) {
+  try {
+    const { id } = request.params;
+    const proyecto = await Proyecto.findByPk(id, {
+      include: {
+        model: CatalogModalidad,
+        as: 'modalidad'
+      }
+    });
+    if (!proyecto) {
+      return reply.status(404).send(createErrorResponse(
+        'Proyecto no encontrado',
+        'ERR_PROYECTO_NO_ENCONTRADO'
+      ));
+    }
+    reply.send({ proyecto });
+  } catch (error) {
+    request.log.error(error);
+    reply.status(500).send(createErrorResponse(
+      `Error al obtener el proyecto social con ID:${request.params.id} `
+    ));
+
+  }
+}
+
+export default { getProyectos, createProyecto, updateProyecto, getProyectoId }
