@@ -1,4 +1,4 @@
-import { getProyectos, createProyecto, updateProyecto, getProyectoId } from '../controllers/proyectosController.js';
+import { getProyectos, createProyecto, updateProyecto, getProyectoId, deleteProyecto } from '../controllers/proyectosController.js';
 
 /**
  * Define las rutas para los proyectos sociales.
@@ -180,6 +180,7 @@ async function proyectoRoutes(fastify, options) {
     }
   }, updateProyecto);
 
+  // Endpoint GET: Obtiene por ID
   fastify.get('/proyectos/:id', {
     schema: {
       description: 'Busca un proyecto social existente por ID',
@@ -239,6 +240,61 @@ async function proyectoRoutes(fastify, options) {
       }
     }
   }, getProyectoId);
+
+
+  fastify.delete('/proyectos/:id', {
+    schema: {
+      description: 'Elimina un proyecto social existente',
+      tags: ['Proyectos Sociales'],
+      params: {
+        type: 'object',
+        properties: {
+          id: { type: 'number', description: 'ID del proyecto a eliminar' }
+        },
+        required: ['id']
+      },
+      response: {
+        200: {
+          description: 'Proyecto eliminado exitosamente',
+          type: 'object',
+          properties: {
+            success: { type: 'boolean', example: true },
+            message: { type: 'string', example: 'Proyecto eliminado exitosamente' }
+          }
+        },
+        404: {
+          description: 'Proyecto no encontrado',
+          type: 'object',
+          properties: {
+            success: { type: 'boolean', example: false },
+            error: {
+              type: 'object',
+              properties: {
+                code: { type: 'string', example: 'ERR_PROYECTO_NO_ENCONTRADO' },
+                message: { type: 'string', example: 'Proyecto no encontrado' },
+                details: { type: 'string', example: null }
+              }
+            }
+          }
+        },
+        500: {
+          description: 'Error al eliminar el proyecto social',
+          type: 'object',
+          properties: {
+            success: { type: 'boolean', example: false },
+            error: {
+              type: 'object',
+              properties: {
+                code: { type: 'string', example: 'ERR_DELETE_PROYECTO' },
+                message: { type: 'string', example: 'Error al eliminar el proyecto social' },
+                details: { type: 'string', example: 'Detalles del error' }
+              }
+            }
+          }
+        }
+      }
+    }
+  }, deleteProyecto);
 }
 
 export default proyectoRoutes;
