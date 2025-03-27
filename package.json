@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "start": "node src/app.js",
-    "dev": "nodemon src/app.js"
+    "dev": "nodemon src/app.js",
+    "create-project": "node scripts/create-project.js"
   },
   "keywords": [],
   "author": "ds611b",
@@ -17,7 +18,9 @@
     "@fastify/swagger-ui": "^5.2.2",
     "dotenv": "^16.4.7",
     "fastify": "^5.2.1",
+    "fs-extra": "^11.3.0",
     "mysql2": "^3.13.0",
+    "prompts": "^2.4.2",
     "sequelize": "^6.37.6"
   },
   "devDependencies": {
